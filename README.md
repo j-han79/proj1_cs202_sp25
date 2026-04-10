@@ -11,7 +11,7 @@ You must use:
 - **External functions only** (no class methods)  
 - **Recursive functions** for list processing  
 - **Correct type hinting** for all functions and data structures  
-  > ✅ *We recommend using a VS Code extension like* `Pylance` *or* `Pyright` *to check type hints and catch errors early*
+
 
 ---
 
