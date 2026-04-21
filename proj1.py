@@ -62,4 +62,21 @@ def densest_rc(rc_list: list[RegionCondition]) -> RegionCondition:
     else:
         return densest_rest
 #Task 4
+def growth_rate(terrain:str)->float:
+    if terrain == "ocean":
+        return 0.0001
+    elif terrain == "mountains":
+        return 0.0005
+    elif terrain == "forest":
+        return -0.00001
+    else:
+        return 0.0003
 
+def project_condition(rc: RegionCondition, years:int) -> RegionCondition:
+    rate = growth_rate(rc.region.terrain)
+    new_pop = int(rc.pop * ((1 + rate) ** years))
+    if rc.pop == 0:
+        new_ghg = 0.0
+    else:
+        new_ghg = rc.ghg_rate * (new_pop / rc.pop)
+    return RegionCondition(rc.region, rc.year + years, new_pop, new_ghg)

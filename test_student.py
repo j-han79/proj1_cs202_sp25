@@ -50,6 +50,11 @@ class TestRegionFunctions(unittest.TestCase):
         expected = "Biggie"
         self.assertEqual(actual, expected)
 
+    def test_project_condition(self):
+        projected = project_condition(self.rc, 5)
+        self.assertIsInstance(projected, RegionCondition)
+        self.assertEqual(projected.year, 2030)
+        self.assertEqual(projected.region, self.rc.region)
 
 
 if __name__ == '__main__':
