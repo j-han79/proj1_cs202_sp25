@@ -2,7 +2,7 @@
 #Task 1
 from dataclasses import dataclass
 import math
-from math import radians, sin, cos, sqrt
+from math import radians, sin, cos, sqrt, pi
 @dataclass(frozen=True)
 class GlobeRect:
     lo_lat: float #lower latitude in degrees
@@ -40,9 +40,26 @@ def area(gr: GlobeRect) -> float:
     hi = radians(gr.hi_lat)
     west = radians(gr.west_long)
     east = radians(gr.east_long)
-    a = (r**2) * abs(east - west) * abs(sin(hi) - sin(lo))
-    return a
+    longitude_diff = east - west
+    if longitude_diff < 0:
+        longitude_diff = longitude_diff + 2 * pi
+    return (r**2) * longitude_diff * abs(sin(hi) - sin(lo))
 def emissions_per_square_km(rc: RegionCondition) -> float:
-    pass
+    region_area = area(rc.region.rect)
+    if region_area == 0:
+        return 0.0
+    return rc.ghg_rate / region_area
 def densest(rc_list: list[RegionCondition]) -> str:
-    pass
+    return densest_rc(rc_list).region.name
+def densest_rc(rc_list: list[RegionCondition]) -> RegionCondition:
+    if len(rc_list) == 1:
+        return rc_list[0]
+    densest_rest = densest_rc(rc_list[1:])
+    first_density = rc_list[0].pop / area(rc_list[0].region.rect)
+    rest_density = densest_rest.pop / area(densest_rest.region.rect)
+    if first_density >= rest_density:
+        return rc_list[0]
+    else:
+        return densest_rest
+#Task 4
+
